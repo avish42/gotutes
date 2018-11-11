@@ -3,10 +3,10 @@ const mongoose = require('mongoose');
 const Joi = require('joi');
 const tutionSchema = new mongoose.Schema({
     course:{
-        type:String,
-        required:true,
+        type:String
     }
 })
+
 const Tution = mongoose.model('tution',tutionSchema);
 
 function validateTution(tution){

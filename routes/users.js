@@ -32,10 +32,9 @@ router.post('/', async (req,res)=>{
         password:req.body.password,
         username:req.body.username,
         // dateJoined:req.body.dateJoined,
-        course_off:new Tution({course:req.body.course}) 
+        // course_off:new Tution({course:req.body.course}) 
     });
-
-    user = await user.save()
+    user = await user.save();
     res.send(user);
 
 });
@@ -50,18 +49,19 @@ router.post('/', async (req,res)=>{
 //         phone:req.body.phone,
 //         username:req.body.username,
 //         email:req.body.email,
-//         password:req.body.password
+//         password:req.body.password,
+//         // course_off:new Tution({course:req.body.course})
 //     }, {new:true});
 
 //     if(!user)return res.status(404).send("something went wrong");
 //     res.send(user);
 // });
 
-// router.delete('/:id', async (req,res)=>{
-//     const user = await User.findByIdAndRemove(req.params.id);
-//     if (!user) return res.status(404).send('The customer with the given ID was not found.');
-//     res.send(user);
-// });
+router.delete('/:id', async (req,res)=>{
+    const user = await User.findByIdAndRemove(req.params.id);
+    if (!user) return res.status(404).send('The user with the given ID was not found.');
+    res.send(user);
+});
 
 
 module.exports = router;

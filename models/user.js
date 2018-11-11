@@ -15,7 +15,7 @@ const User = mongoose.model('user',new mongoose.Schema({
     password:{type: String, required:true},
     username:{type:String, required:true},
     dateJoined:{type:Date,default:Date.now},
-    course_off:tutionSchema
+    course_off:[tutionSchema]
 
 }));
 
@@ -26,8 +26,8 @@ function validateUser(customer){
         isStudent:Joi.boolean(),
         email:Joi.string().min(1).max(40).required(),
         password:Joi.string().min(6).max(15).required(),
-        username:Joi.string().min(2).max(15).required(),
-        course:Joi.string().min(2).max(50).required()
+        username:Joi.string().min(2).max(15).required()
+        // course:Joi.string().min(2).max(50)
     };
 
     return Joi.validate(customer,schema);
