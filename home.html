@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Home</title>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+	<script>
+
+		//getting the form input fields in formdata array when form is submitted
+		const formData = {};
+		function submit(){
+			// console.log("??????");
+			var formElements = document.querySelector("#signup-form").elements
+			for(let i=0;i<formElements.length;i++){
+				formData[formElements[i].name] = formElements[i].value;
+				// console.log("check");
+			}
+			console.log(formData);
+			postLocation();
+		}
+	
+		//submitting the location to server
+		function postLocation(){
+			navigator.geolocation.getCurrentPosition(function(position) {
+				fetch('http://localhost:3000/api/locations',{
+				// mode:"no-cors",
+				method:"POST",
+				headers: {
+				"Content-Type": "application/json",
+				// "Content-Type": "application/x-www-form-urlencoded",
+				},
+				body: JSON.stringify({"lat":position.coords.latitude,"long":position.coords.longitude})
+				}).then(res=>{
+					return res.json();
+				}).then(res=>{
+					console.log(res._id);
+					postUser(res._id);
+				})
+			});		
+		}	
+		
+		//submitting user 
+		function postUser(location){
+			if(formData['isStudent'] == 'on') formData['isStudent'] = true;
+			else formData['isStudent'] = false;
+			formData['location'] = location;
+			fetch('http://localhost:3000/api/users',{
+				method:"POST",
+				headers: {
+				"Content-Type": "application/json",
+				// "Content-Type": "application/x-www-form-urlencoded",
+				},
+				body: JSON.stringify(formData),
+			})
+			 .then(res=> {return res.json()})
+			 .then(resp=>{console.log(resp)})
+		}
+		
+	</script>
+</head>
+<body>
+<form id="signup-form">
+	name:<input type="text" name="name" required ><br>
+	phone number:<input type="number" name="phone" required><br>
+	isStudent:<input type="checkbox" name="isStudent" required><br>
+	email:<input type="text" name="email" required><br>
+	password:<input type="password" name="password" required><br>
+	username:<input type="text" name="username" required><br>
+	course:<input type="text" name="course" required><br>
+	<!-- <input type="submit" value="Register"> -->
+</form>
+<button onclick="submit()">Register</button>
+
+
+
+</body>
+
+
+
+</html>

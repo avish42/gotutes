@@ -1,7 +1,12 @@
+const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
 const {Tution} = require('../models/tution');
 const {User, validateUser} = require('../models/user');
+
+// const Fwan = require('fawn');
+
+// Fwan.init(require('mongoose'));
 
 router.get('/',async (req,res)=>{
     const users = await User.find();
@@ -32,10 +37,15 @@ router.post('/', async (req,res)=>{
         password:req.body.password,
         username:req.body.username,
         // dateJoined:req.body.dateJoined,
-        // course_off:new Tution({course:req.body.course}) 
+        course_off:new Tution({
+            course:req.body.course
+        }),
+        location:req.body.location,
     });
     user = await user.save();
-    res.send(user);
+
+    const token = user.generateAuthToken();
+    res.header('x-auth-token',token).send(_.pick(user,['name','email','id']));
 
 });
 
